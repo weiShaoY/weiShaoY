@@ -3,7 +3,7 @@
   <!-- dynamic typing effect 动态打字效果 -->
   <div>
     <a href="https://blog.sunguoqi.com/">
-      <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=22&pause=1000&color=161618&center=true&vCenter=true&random=false&width=500&lines=console.log(%22Hello%2CWorld!%22);weiShaoY+Wishes+You+Never+Have+Bug" alt="Typing SVG" />
+      <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=22&pause=1000&color=161618&center=true&vCenter=true&random=false&width=500&lines=console.log(%22Hello%2CWorld!%22);Wishes+You+Never+Have+Bug" alt="Typing SVG" />
     </a>
   </div>
 
@@ -44,3 +44,4 @@
 ###### My Skills
 
 ![https://github.com/yzqdev](https://skillicons.dev/icons?i=html,css,js,ts,vue,react,git,github,vscode,webstorm,idea,less,md,vite,pinia,&theme=dark&perline=5)
+
