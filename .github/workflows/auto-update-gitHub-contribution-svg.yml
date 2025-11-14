@@ -1,0 +1,86 @@
+name: gitHubContributionSvg
+
+on:
+  # 定时触发：每小时执行一次
+  schedule:
+    - cron: '0 * * * *' # 每分钟0分时执行，即每小时一次
+  # 代码推送触发：每次提交到主分支时执行
+  push:
+    branches: [main, master]
+  # 手动触发：允许在 GitHub Actions 页面手动运行此工作流
+  workflow_dispatch:
+
+# 设置权限：允许工作流写入仓库内容
+permissions:
+  contents: write
+
+jobs:
+  build:
+    # 运行环境：使用最新的 Ubuntu 系统
+    runs-on: ubuntu-latest
+    # 任务名称：生成 GitHub 3D 贡献图
+    name: generate-gitHubContributionSvg
+    steps:
+      # 步骤1：检出仓库代码
+      - uses: actions/checkout@v4
+
+      # 步骤2：使用 3D 贡献图生成器
+      # =====================================================
+      # 功能：自动生成 GitHub 贡献数据的 3D 立体可视化图表
+      #
+      # 工作流程：
+      # 1. 通过 GitHub API 获取指定用户的贡献历史数据
+      # 2. 使用 Three.js 和 D3.js 生成 3D 立体 SVG 图表
+      # 3. 将生成的 SVG 文件保存到仓库的 profile-3d-contrib 目录
+      #
+      # 输出文件：
+      # - profile-3d-contrib/profile-3d-contrib.svg (主图表)
+      # - profile-3d-contrib/profile.svg (2D备用版本)
+      #
+      # 技术栈：Node.js + GitHub API + SVG + 3D 渲染
+      # =====================================================
+      - uses: yoshi389111/github-profile-3d-contrib@latest
+        # 环境变量配置区
+        env:
+          # GitHub 认证令牌
+          # 用途：用于访问 GitHub API 获取贡献数据，以及写入生成的 SVG 文件
+          # 注意：此令牌由 GitHub 自动生成和管理，无需手动配置
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          # 目标用户名
+          # 用途：指定要为哪个用户生成贡献图
+          # 动态值：${{ github.repository_owner }} 自动获取当前仓库所有者
+          # 示例：如果仓库属于用户 "weiShaoY"，则生成 weiShaoY 的贡献图
+          USERNAME: ${{ github.repository_owner }}
+
+        # 可选：参数配置区（如果 Action 支持）
+        # with:
+        #   theme: "github"          # 图表主题
+        #   max_column: 20           # 最大列数
+        #   pixel_size: 8            # 像素大小
+        #   font_size: 14            # 字体大小
+
+      # 步骤3：提交并推送生成的贡献图
+      - name: Commit & Push
+        run: |
+          # 配置 Git 提交用户信息 - 使用 GitHub Actions 机器人的身份
+          # 目的：标识提交是由自动化工作流创建的，而不是个人用户
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          # 将工作区中的所有变更文件添加到 Git 暂存区
+          # -A 参数表示添加所有新增、修改和删除的文件
+          # 包括生成的 3D 贡献图 SVG 文件和其他任何变更
+          git add -A .
+
+          # 获取当前时间并格式化为中文日期时间
+          CURRENT_TIME=$(date +'%Y年%m月%d日 %H:%M:%S')
+
+          # 提交变更到本地仓库
+          # 使用条件判断：只有在有实际变更时才执行推送
+          # 如果没有文件变更,git commit 会失败,if 语句确保跳过推送步骤
+          if git commit -m "chore: 自动更新3D贡献图 - 生成成功 $CURRENT_TIME"; then
+            # 将本地提交推送到远程仓库
+            # 完成整个自动化更新流程
+            git push
+          fi
