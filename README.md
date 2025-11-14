@@ -32,7 +32,7 @@
 
 ###### 🤺 About Me
 
-<img align="right" width="88" src="image/vForVendetta.png" />
+<img align="right" width="88" src="images/vForVendetta.png" />
 
 <p>&emsp;&emsp;嗨，你好，我是weiShaoY。</p>
 <p>&emsp;&emsp;目前在长沙从事前端开发工作。</p>
